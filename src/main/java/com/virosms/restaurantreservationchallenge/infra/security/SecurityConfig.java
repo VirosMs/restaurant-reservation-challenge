@@ -34,6 +34,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/tables").hasAnyRole("CLIENT", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/tables").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/tables/{id}").hasAnyRole("ADMIN", "CLIENT")
+                        .requestMatchers(HttpMethod.DELETE, "/tables/{id}").hasRole("ADMIN")
                         .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )

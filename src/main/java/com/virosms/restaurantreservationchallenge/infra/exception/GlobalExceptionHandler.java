@@ -57,6 +57,16 @@ public class GlobalExceptionHandler {
         return buildProblemResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Error interno del servidor", ex.getMessage(), request);
     }
 
+    @ExceptionHandler(NotExistException.class)
+    public ResponseEntity<?> handleNotExist(NotExistException ex, WebRequest request) {
+        return buildProblemResponse(HttpStatus.NOT_FOUND, "No existe", ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity<?> handleAlreadyExists(AlreadyExistsException ex, WebRequest request) {
+        return buildProblemResponse(HttpStatus.CONFLICT, "Ya existe", ex.getMessage(), request);
+    }
+
     // --- Manejador de errores global (404, 405, etc.) ---
 
     @RequestMapping("/error")

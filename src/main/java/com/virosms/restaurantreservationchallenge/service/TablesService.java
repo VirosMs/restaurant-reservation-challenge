@@ -1,12 +1,15 @@
 package com.virosms.restaurantreservationchallenge.service;
 
+import com.virosms.restaurantreservationchallenge.infra.exception.AlreadyExistsException;
 import com.virosms.restaurantreservationchallenge.infra.exception.BadRequestException;
+import com.virosms.restaurantreservationchallenge.infra.exception.NotExistException;
 import com.virosms.restaurantreservationchallenge.mapper.TablesMapper;
 import com.virosms.restaurantreservationchallenge.model.Tables.CreateTableResponse;
 import com.virosms.restaurantreservationchallenge.model.Tables.Tables;
 import com.virosms.restaurantreservationchallenge.model.Tables.TablesDTO;
 import com.virosms.restaurantreservationchallenge.repository.TablesRepository;
 import com.virosms.restaurantreservationchallenge.utils.Utils;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -61,7 +64,7 @@ public class TablesService {
         }
 
         if (tablesRepository.findByNombre(data.nombre()) != null) {
-            throw new BadRequestException("Table with name " + data.nombre() + " already exists");
+            throw new AlreadyExistsException("Table with name " + data.nombre() + " already exists");
         }
 
         try{
@@ -70,6 +73,44 @@ public class TablesService {
             return ResponseEntity.ok(new CreateTableResponse("Table created successfully", data));
         } catch (Exception e) {
             throw new BadRequestException("Error creating table: " + e.getMessage());
+        }
+    }
+
+    public ResponseEntity<Void> updateTable(Long id, @Valid TablesDTO newData) {
+
+        if (!Utils.isValidTable(newData)){
+            System.out.println("Invalid table " + newData);
+            throw  new BadRequestException("Invalid table data");
+        }
+
+        Tables oldData = tablesRepository.findById(id)
+                .orElseThrow(() -> new NotExistException("Table with id " + id + " not exists"));
+
+        if (oldData == null) {
+            throw new BadRequestException("Table with id " + id + " not found");
+        }
+
+        tablesMapper.updateEntityFromDto(newData, oldData);
+
+        try {
+            tablesRepository.save(oldData);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            throw new BadRequestException("Error updating table: " + e.getMessage());
+        }
+    }
+
+    public ResponseEntity<Void> deleteTable(Long id) {
+
+        if (!tablesRepository.existsById(id)) {
+            throw new NotExistException("Table with id " + id + " not exists");
+        }
+
+        try {
+            tablesRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            throw new BadRequestException("Error deleting table: " + e.getMessage());
         }
     }
 }
