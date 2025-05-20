@@ -2,6 +2,7 @@ package com.virosms.restaurantreservationchallenge.service;
 
 import com.virosms.restaurantreservationchallenge.exception.BadRequestException;
 import com.virosms.restaurantreservationchallenge.model.User.RegisterDTO;
+import com.virosms.restaurantreservationchallenge.model.User.UserRole;
 import com.virosms.restaurantreservationchallenge.model.User.Users;
 import com.virosms.restaurantreservationchallenge.repository.UsersRepository;
 import com.virosms.restaurantreservationchallenge.utils.Utils;
@@ -24,7 +25,7 @@ public class AuthenticationService implements UserDetailsService {
 
     private static final Logger logger = LogManager.getLogger(AuthenticationService.class);
 
-    private UsersRepository usersRepository;
+    private final UsersRepository usersRepository;
 
 
     @Autowired
@@ -32,7 +33,7 @@ public class AuthenticationService implements UserDetailsService {
         this.usersRepository = usersRepository;
     }
 
-    public ResponseEntity registrarUsuario(RegisterDTO data) {
+    public ResponseEntity<String> registrarUsuario(RegisterDTO data) {
         logger.info("Registrando usuario INICIO");
 
         if (!Utils.validateUser(data)) {
@@ -40,36 +41,30 @@ public class AuthenticationService implements UserDetailsService {
             throw new BadRequestException("Error en los datos de entrada del usuario");
         }
 
-        System.out.println("data = " + data);
-
         try {
             boolean exists = this.usersRepository.existsByEmail(data.email());
             if (exists) {
                 logger.error("Ya existe un usuario con ese email o nombre: {}", data);
                 throw new BadRequestException("Ya existe un usuario con ese email o nombre");
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new BadRequestException(e.getMessage());
         }
-        System.out.println("data = " + data);
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        System.out.println("encryptedPassword = " + encryptedPassword);
 
-        Users user = new Users(data.nombre(), data.email(), encryptedPassword, data.role());
-        System.out.println("user = " + user);
+        Users user = new Users(data.nombre(), data.email(), encryptedPassword, UserRole.CLIENT);
 
-
-        try{
+        try {
             this.usersRepository.save(user);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("Error al guardar el usuario: {}", e.getMessage());
             throw new BadRequestException(e.getMessage());
         }
 
         logger.info("Registrando usuario FIN");
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body("¡Usuario registrado exitosamente! <3 Bienvenido a la plataforma.");
     }
 
 

@@ -43,7 +43,7 @@ public class AuthenticationController {
      * @return Mensaje de éxito.
      */
     @PostMapping("/register")
-    public ResponseEntity registrarUsuario(@RequestBody @Valid RegisterDTO registerDTO) {
+    public ResponseEntity<String> registrarUsuario(@RequestBody @Valid RegisterDTO registerDTO) {
         return authenticationService.registrarUsuario(registerDTO);
     }
 
