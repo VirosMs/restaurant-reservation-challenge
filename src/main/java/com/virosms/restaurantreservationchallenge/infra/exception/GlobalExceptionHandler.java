@@ -1,4 +1,4 @@
-package com.virosms.restaurantreservationchallenge.exception;
+package com.virosms.restaurantreservationchallenge.infra.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.web.error.ErrorAttributeOptions;

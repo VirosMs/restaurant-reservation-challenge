@@ -1,6 +1,6 @@
 package com.virosms.restaurantreservationchallenge.service;
 
-import com.virosms.restaurantreservationchallenge.exception.BadRequestException;
+import com.virosms.restaurantreservationchallenge.infra.exception.BadRequestException;
 import com.virosms.restaurantreservationchallenge.model.User.RegisterDTO;
 import com.virosms.restaurantreservationchallenge.model.User.UserRole;
 import com.virosms.restaurantreservationchallenge.model.User.Users;

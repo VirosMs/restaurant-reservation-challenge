@@ -1,4 +1,4 @@
-package com.virosms.restaurantreservationchallenge.exception;
+package com.virosms.restaurantreservationchallenge.infra.exception;
 
 public class UnauthorizedException extends RuntimeException {
     public UnauthorizedException(String message) {

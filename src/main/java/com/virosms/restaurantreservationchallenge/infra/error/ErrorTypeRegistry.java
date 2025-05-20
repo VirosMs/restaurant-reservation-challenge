@@ -1,4 +1,4 @@
-package com.virosms.restaurantreservationchallenge.error;
+package com.virosms.restaurantreservationchallenge.infra.error;
 
 public class ErrorTypeRegistry {
 

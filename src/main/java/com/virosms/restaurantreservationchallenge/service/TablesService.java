@@ -1,6 +1,6 @@
 package com.virosms.restaurantreservationchallenge.service;
 
-import com.virosms.restaurantreservationchallenge.exception.BadRequestException;
+import com.virosms.restaurantreservationchallenge.infra.exception.BadRequestException;
 import com.virosms.restaurantreservationchallenge.mapper.TablesMapper;
 import com.virosms.restaurantreservationchallenge.model.Tables.CreateTableResponse;
 import com.virosms.restaurantreservationchallenge.model.Tables.Tables;
