@@ -56,5 +56,36 @@ public class Tables {
                 default -> throw new IllegalArgumentException("Invalid status: " + status);
             };
         }
+
+        /**
+         * Validates if the given status is a valid enum.
+         *
+         * @param status the status to validate
+         * @return true if the status is valid, false otherwise
+         */
+        public static boolean validateStatus(Status status) {
+            if (status == null) return false;
+            for (Status s : Status.values()) {
+                if (s == status) return true;
+            }
+            return false;
+        }
+
+        /**
+         * Compares two status enums for equality.
+         *
+         * @param s1 the first status enum
+         * @param s2 the second status enum
+         * @return true if both statuses are equal, false otherwise
+         */
+        public static boolean equals(Status s1, Status s2) {
+            if (s1 == null && s2 == null) {
+                return true;
+            }
+            if (s1 == null || s2 == null) {
+                return false;
+            }
+            return s1.name().equals(s2.name());
+        }
     }
 }

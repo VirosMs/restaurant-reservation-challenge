@@ -16,4 +16,5 @@ public interface TablesRepository extends JpaRepository<Tables, Long> {
     @Query("SELECT new com.virosms.restaurantreservationchallenge.model.Tables.TablesDTO(t.nombre, t.capacidad, t.status) FROM tables t")
     List<TablesDTO> findAllTablesAsDTO();
 
+    Tables findByNombre(String nombre);
 }

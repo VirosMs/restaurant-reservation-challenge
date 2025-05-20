@@ -1,7 +1,12 @@
 package com.virosms.restaurantreservationchallenge.service;
 
+import com.virosms.restaurantreservationchallenge.exception.BadRequestException;
+import com.virosms.restaurantreservationchallenge.mapper.TablesMapper;
+import com.virosms.restaurantreservationchallenge.model.Tables.CreateTableResponse;
+import com.virosms.restaurantreservationchallenge.model.Tables.Tables;
 import com.virosms.restaurantreservationchallenge.model.Tables.TablesDTO;
 import com.virosms.restaurantreservationchallenge.repository.TablesRepository;
+import com.virosms.restaurantreservationchallenge.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,6 +22,9 @@ public class TablesService {
 
     @Autowired
     private TablesRepository tablesRepository;
+
+    @Autowired
+    private TablesMapper tablesMapper;
 
     /**
      * Método para obtener todas las mesas.
@@ -38,4 +46,30 @@ public class TablesService {
         return ResponseEntity.ok().body(tables);
     }
 
+
+    /**
+     * Método para crear una nueva mesa.
+     *
+     * @param data Datos de la mesa a crear.
+     * @return Respuesta con el mensaje de éxito y los datos de la mesa creada.
+     */
+    public ResponseEntity<CreateTableResponse> createTable(TablesDTO data) {
+
+        if (!Utils.isValidTable(data)){
+            System.out.println("Invalid table " + data);
+            throw  new BadRequestException("Invalid table data");
+        }
+
+        if (tablesRepository.findByNombre(data.nombre()) != null) {
+            throw new BadRequestException("Table with name " + data.nombre() + " already exists");
+        }
+
+        try{
+            Tables table = tablesMapper.toEntity(data);
+            tablesRepository.save(table);
+            return ResponseEntity.ok(new CreateTableResponse("Table created successfully", data));
+        } catch (Exception e) {
+            throw new BadRequestException("Error creating table: " + e.getMessage());
+        }
+    }
 }

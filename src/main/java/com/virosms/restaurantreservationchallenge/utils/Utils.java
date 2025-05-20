@@ -1,6 +1,8 @@
 package com.virosms.restaurantreservationchallenge.utils;
 
 
+import com.virosms.restaurantreservationchallenge.model.Tables.Tables;
+import com.virosms.restaurantreservationchallenge.model.Tables.TablesDTO;
 import com.virosms.restaurantreservationchallenge.model.User.RegisterDTO;
 import com.virosms.restaurantreservationchallenge.model.User.Users;
 
@@ -46,5 +48,17 @@ public class Utils {
      */
     public static boolean isValidEmail(String email) {
         return email != null && !email.isBlank() && email.matches(Constants.EMAIL_REGEX);
+    }
+
+    /**
+     * Validates the table data.
+     *
+     * @param data the table data to validate
+     * @return true if the table data is valid, false otherwise
+     */
+    public static boolean isValidTable(TablesDTO data) {
+        return data.nombre() != null && !data.nombre().isBlank() &&
+                data.capacidad() > 0 &&
+                data.status() != null && Tables.Status.validateStatus(data.status());
     }
 }
