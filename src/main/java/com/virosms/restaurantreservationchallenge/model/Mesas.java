@@ -13,17 +13,18 @@ public class Mesas {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "nombre")
+
     private String nombre;
 
-    @JoinColumn(name = "capacidad")
+
     private Integer capacidad;
 
-    @JoinColumn(name = "status")
+
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     public enum Status {
-        DISPONIBLE, RESERVADA, CANCELADA;
+        DISPONIBLE, RESERVADA, INACTIVA;
 
         /**
          * Returns the string representation of the status.
@@ -45,7 +46,7 @@ public class Mesas {
             return switch (status.toUpperCase()) {
                 case "DISPONIBLE" -> DISPONIBLE;
                 case "RESERVADA" -> RESERVADA;
-                case "CANCELADA" -> CANCELADA;
+                case "INACTIVA" -> INACTIVA;
                 default -> throw new IllegalArgumentException("Invalid status: " + status);
             };
         }

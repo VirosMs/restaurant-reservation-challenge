@@ -1,6 +1,7 @@
 package com.virosms.restaurantreservationchallenge.model;
 
 
+import com.virosms.restaurantreservationchallenge.model.User.Users;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -22,10 +23,38 @@ public class Reservas {
     @JoinColumn(name = "mesa_id", nullable = false)
     private Mesas mesaId;
 
-    @JoinColumn(name = "data_reserva")
+    @JoinColumn(name = "fecha_reserva")
     //@Temporal(TemporalType.TIMESTAMP)
     private Date fechaReserva;
 
-    @JoinColumn(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    public enum Status {
+        ACTIVO, CANCELADO;
+
+        /**
+         * Returns the string representation of the status.
+         *
+         * @return the string representation of the status
+         */
+        public String getStatus() {
+            return this.name();
+        }
+
+        /**
+         * Converts a string to a status enum.
+         *
+         * @param status the string representation of the status
+         * @return the corresponding status enum
+         * @throws IllegalArgumentException if the string does not match any status
+         */
+        public static Status fromString(String status) {
+            return switch (status.toUpperCase()) {
+                case "ACTIVO" -> ACTIVO;
+                case "CANCELADO" -> CANCELADO;
+                default -> throw new IllegalArgumentException("Invalid status: " + status);
+            };
+        }
+    }
 }
