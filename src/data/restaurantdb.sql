@@ -33,17 +33,17 @@ INSERT INTO USERS (nombre, email, password, role) VALUES ('Sofía López', 'sofi
 
 -- Insertar MESAS
 
-INSERT INTO MESAS (nombre, capacidad, status) VALUES ('Mesa 1', 4, 'disponible');
-INSERT INTO MESAS (nombre, capacidad, status) VALUES ('Mesa 2', 2, 'reservada');
-INSERT INTO MESAS (nombre, capacidad, status) VALUES ('Mesa 3', 6, 'reservada');
-INSERT INTO MESAS (nombre, capacidad, status) VALUES ('Mesa 4', 8, 'disponible');
-INSERT INTO MESAS (nombre, capacidad, status) VALUES ('Mesa 5', 4, 'disponible');
-INSERT INTO MESAS (nombre, capacidad, status) VALUES ('Mesa 6', 2, 'reservada');
-INSERT INTO MESAS (nombre, capacidad, status) VALUES ('Mesa 7', 6, 'disponible');
-INSERT INTO MESAS (nombre, capacidad, status) VALUES ('Mesa 8', 8, 'disponible');
-INSERT INTO MESAS (nombre, capacidad, status) VALUES ('Mesa 9', 4, 'disponible');
-INSERT INTO MESAS (nombre, capacidad, status) VALUES ('Mesa 10', 2, 'inactiva');
-INSERT INTO MESAS (nombre, capacidad, status) VALUES ('Mesa 11', 6, 'disponible');
+INSERT INTO TABLES (nombre, capacidad, status) VALUES ('Mesa 1', 4, 'disponible');
+INSERT INTO TABLES (nombre, capacidad, status) VALUES ('Mesa 2', 2, 'reservada');
+INSERT INTO TABLES (nombre, capacidad, status) VALUES ('Mesa 3', 6, 'reservada');
+INSERT INTO TABLES (nombre, capacidad, status) VALUES ('Mesa 4', 8, 'disponible');
+INSERT INTO TABLES (nombre, capacidad, status) VALUES ('Mesa 5', 4, 'disponible');
+INSERT INTO TABLES (nombre, capacidad, status) VALUES ('Mesa 6', 2, 'reservada');
+INSERT INTO TABLES (nombre, capacidad, status) VALUES ('Mesa 7', 6, 'disponible');
+INSERT INTO TABLES (nombre, capacidad, status) VALUES ('Mesa 8', 8, 'disponible');
+INSERT INTO TABLES (nombre, capacidad, status) VALUES ('Mesa 9', 4, 'disponible');
+INSERT INTO TABLES (nombre, capacidad, status) VALUES ('Mesa 10', 2, 'inactiva');
+INSERT INTO TABLES (nombre, capacidad, status) VALUES ('Mesa 11', 6, 'disponible');
 
 
 -- Insertar RESERVAS

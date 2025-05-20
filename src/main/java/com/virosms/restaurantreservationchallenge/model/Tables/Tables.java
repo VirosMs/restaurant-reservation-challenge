@@ -1,12 +1,18 @@
-package com.virosms.restaurantreservationchallenge.model;
+package com.virosms.restaurantreservationchallenge.model.Tables;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Entity
+
 @Data
-public class Mesas {
+@Entity(name = "tables")
+@Table(name = "tables")
+@NoArgsConstructor
+@AllArgsConstructor
+public class Tables {
 
     @Id
     @JoinColumn(name = "id")

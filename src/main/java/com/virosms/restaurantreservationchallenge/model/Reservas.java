@@ -1,6 +1,7 @@
 package com.virosms.restaurantreservationchallenge.model;
 
 
+import com.virosms.restaurantreservationchallenge.model.Tables.Tables;
 import com.virosms.restaurantreservationchallenge.model.User.Users;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -21,7 +22,7 @@ public class Reservas {
 
     @ManyToOne
     @JoinColumn(name = "mesa_id", nullable = false)
-    private Mesas mesaId;
+    private Tables mesaId;
 
     @JoinColumn(name = "fecha_reserva")
     //@Temporal(TemporalType.TIMESTAMP)
