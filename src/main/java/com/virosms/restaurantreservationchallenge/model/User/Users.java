@@ -38,7 +38,7 @@ public class Users implements UserDetails {
     public Users(String nombre, String email, String password, UserRole role) {
         if (!Utils.isValidEmail(email)) return;
         this.nombre = nombre;
-        this.email = email;
+        this.email = email.toLowerCase();
         this.password = password;
         this.role = role;
     }
