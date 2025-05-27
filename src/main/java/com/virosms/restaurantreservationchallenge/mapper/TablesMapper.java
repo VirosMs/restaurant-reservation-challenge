@@ -1,6 +1,6 @@
 package com.virosms.restaurantreservationchallenge.mapper;
 
-import com.virosms.restaurantreservationchallenge.model.Tables.Tables;
+import com.virosms.restaurantreservationchallenge.model.Tables.RestaurantTables;
 import com.virosms.restaurantreservationchallenge.model.Tables.TablesDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -9,10 +9,10 @@ import org.mapstruct.MappingTarget;
 public interface TablesMapper {
 
 
-    Tables toEntity(TablesDTO dto);
+    RestaurantTables toEntity(TablesDTO dto);
 
-    TablesDTO toDto(Tables entity);
+    TablesDTO toDto(RestaurantTables entity);
 
-    void updateEntityFromDto(TablesDTO dto, @MappingTarget Tables entity);
+    void updateEntityFromDto(TablesDTO dto, @MappingTarget RestaurantTables entity);
 
 }

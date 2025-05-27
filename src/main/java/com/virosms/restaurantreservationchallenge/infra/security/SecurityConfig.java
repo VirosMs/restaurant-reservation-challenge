@@ -36,6 +36,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/tables").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/tables/{id}").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers(HttpMethod.DELETE, "/tables/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/reservations").hasAnyRole("CLIENT", "ADMIN")
                         .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )

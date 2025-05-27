@@ -1,7 +1,6 @@
 package com.virosms.restaurantreservationchallenge.controller;
 
 import com.virosms.restaurantreservationchallenge.model.Tables.CreateTableResponse;
-import com.virosms.restaurantreservationchallenge.model.Tables.Tables;
 import com.virosms.restaurantreservationchallenge.model.Tables.TablesDTO;
 import com.virosms.restaurantreservationchallenge.service.TablesService;
 import jakarta.validation.Valid;

@@ -29,6 +29,8 @@ public class Users implements UserDetails {
     @JoinColumn(name = "nombre")
     private String nombre;
     private String email;
+
+
     @JoinColumn(name = "password")
     private String password;
     @Enumerated(EnumType.STRING)

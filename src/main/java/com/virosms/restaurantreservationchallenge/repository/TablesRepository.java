@@ -1,6 +1,6 @@
 package com.virosms.restaurantreservationchallenge.repository;
 
-import com.virosms.restaurantreservationchallenge.model.Tables.Tables;
+import com.virosms.restaurantreservationchallenge.model.Tables.RestaurantTables;
 import com.virosms.restaurantreservationchallenge.model.Tables.TablesDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,10 +11,10 @@ import java.util.List;
 
 @Repository
 @EnableJpaRepositories
-public interface TablesRepository extends JpaRepository<Tables, Long> {
+public interface TablesRepository extends JpaRepository<RestaurantTables, Long> {
 
-    @Query("SELECT new com.virosms.restaurantreservationchallenge.model.Tables.TablesDTO(t.nombre, t.capacidad, t.status) FROM tables t")
+    @Query("SELECT new com.virosms.restaurantreservationchallenge.model.Tables.TablesDTO(t.nombre, t.capacidad, t.status) FROM RestaurantTables t")
     List<TablesDTO> findAllTablesAsDTO();
 
-    Tables findByNombre(String nombre);
+    RestaurantTables findByNombre(String nombre);
 }

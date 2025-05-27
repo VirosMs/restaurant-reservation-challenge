@@ -5,7 +5,7 @@ import com.virosms.restaurantreservationchallenge.infra.exception.BadRequestExce
 import com.virosms.restaurantreservationchallenge.infra.exception.NotExistException;
 import com.virosms.restaurantreservationchallenge.mapper.TablesMapper;
 import com.virosms.restaurantreservationchallenge.model.Tables.CreateTableResponse;
-import com.virosms.restaurantreservationchallenge.model.Tables.Tables;
+import com.virosms.restaurantreservationchallenge.model.Tables.RestaurantTables;
 import com.virosms.restaurantreservationchallenge.model.Tables.TablesDTO;
 import com.virosms.restaurantreservationchallenge.repository.TablesRepository;
 import com.virosms.restaurantreservationchallenge.utils.Utils;
@@ -23,11 +23,15 @@ import java.util.List;
 @Transactional
 public class TablesService {
 
-    @Autowired
-    private TablesRepository tablesRepository;
+    private final TablesRepository tablesRepository;
+
+    private final TablesMapper tablesMapper;
 
     @Autowired
-    private TablesMapper tablesMapper;
+    public TablesService(TablesRepository tablesRepository, TablesMapper tablesMapper) {
+        this.tablesRepository = tablesRepository;
+        this.tablesMapper = tablesMapper;
+    }
 
     /**
      * Método para obtener todas las mesas.
@@ -58,7 +62,7 @@ public class TablesService {
      */
     public ResponseEntity<CreateTableResponse> createTable(TablesDTO data) {
 
-        if (!Utils.isValidTable(data)){
+        if (Utils.isValidTable(data)){
             System.out.println("Invalid table " + data);
             throw  new BadRequestException("Invalid table data");
         }
@@ -68,7 +72,7 @@ public class TablesService {
         }
 
         try{
-            Tables table = tablesMapper.toEntity(data);
+            RestaurantTables table = tablesMapper.toEntity(data);
             tablesRepository.save(table);
             return ResponseEntity.ok(new CreateTableResponse("Table created successfully", data));
         } catch (Exception e) {
@@ -78,12 +82,12 @@ public class TablesService {
 
     public ResponseEntity<Void> updateTable(Long id, @Valid TablesDTO newData) {
 
-        if (!Utils.isValidTable(newData)){
+        if (Utils.isValidTable(newData)){
             System.out.println("Invalid table " + newData);
             throw  new BadRequestException("Invalid table data");
         }
 
-        Tables oldData = tablesRepository.findById(id)
+        RestaurantTables oldData = tablesRepository.findById(id)
                 .orElseThrow(() -> new NotExistException("Table with id " + id + " not exists"));
 
         if (oldData == null) {
@@ -112,5 +116,11 @@ public class TablesService {
         } catch (Exception e) {
             throw new BadRequestException("Error deleting table: " + e.getMessage());
         }
+    }
+
+    public boolean isAvailableCapacity(Long tableId, int cantidadPersonas) {
+
+        return tablesRepository.findById(tableId).stream().anyMatch(tables ->
+                tables.getCapacidad() >= cantidadPersonas);
     }
 }

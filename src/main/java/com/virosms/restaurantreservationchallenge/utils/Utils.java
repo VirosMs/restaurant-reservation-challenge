@@ -1,13 +1,17 @@
 package com.virosms.restaurantreservationchallenge.utils;
 
 
-import com.virosms.restaurantreservationchallenge.model.Tables.Tables;
+import com.virosms.restaurantreservationchallenge.model.Tables.RestaurantTables;
 import com.virosms.restaurantreservationchallenge.model.Tables.TablesDTO;
 import com.virosms.restaurantreservationchallenge.model.User.RegisterDTO;
 import com.virosms.restaurantreservationchallenge.model.User.Users;
+import com.virosms.restaurantreservationchallenge.model.reservation.ReservationsRequest;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
 public class Utils {
-
 
 
     /**
@@ -20,8 +24,8 @@ public class Utils {
         if (user instanceof Users userObj) {
             return isValidUser(userObj.getNombre(), userObj.getEmail(), userObj.getPassword());
         }
-        if (user instanceof RegisterDTO registerDTO) {
-            return isValidUser(registerDTO.nombre(), registerDTO.email(), registerDTO.password());
+        if (user instanceof RegisterDTO(String nombre, String email, String password)) {
+            return isValidUser(nombre, email, password);
         }
         return false;
     }
@@ -29,8 +33,8 @@ public class Utils {
     /**
      * Validates the user data.
      *
-     * @param nombre  the name of the user
-     * @param email   the email of the user
+     * @param nombre   the name of the user
+     * @param email    the email of the user
      * @param password the password of the user
      * @return true if the user data is valid, false otherwise
      */
@@ -57,8 +61,25 @@ public class Utils {
      * @return true if the table data is valid, false otherwise
      */
     public static boolean isValidTable(TablesDTO data) {
-        return data.nombre() != null && !data.nombre().isBlank() &&
-                data.capacidad() > 0 &&
-                data.status() != null && Tables.Status.validateStatus(data.status());
+        return data.nombre() == null || data.nombre().isBlank() ||
+                data.capacidad() <= 0 ||
+                data.status() == null || !RestaurantTables.Status.validateStatus(data.status());
+    }
+
+    public static boolean validateRequest(ReservationsRequest request) {
+        System.out.println("Validating request: " + request);
+        return request != null &&
+                request.user() != null && request.user().getId() != null &&
+                request.table() != null && request.table().getId() != null &&
+                validateDate(request.fechaReserva()) && validateCapacityPersons(request.cantidadPersonas());
+    }
+
+    public static boolean validateCapacityPersons(Integer cantidadPersonas) {
+        return cantidadPersonas != null && cantidadPersonas > 0;
+    }
+
+
+    public static boolean validateDate(LocalDateTime date) {
+        return date != null && date.isBefore(new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
     }
 }

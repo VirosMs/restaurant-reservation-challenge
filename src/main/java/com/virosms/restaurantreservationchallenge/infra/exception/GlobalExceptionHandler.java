@@ -67,6 +67,11 @@ public class GlobalExceptionHandler {
         return buildProblemResponse(HttpStatus.CONFLICT, "Ya existe", ex.getMessage(), request);
     }
 
+    @ExceptionHandler(InvalidValueRequestException.class)
+    public ResponseEntity<?> handleInvalidValueRequest(InvalidValueRequestException ex, WebRequest request) {
+        return buildProblemResponse(HttpStatus.BAD_REQUEST, "Valores de entrada inválido", ex.getMessage(), request);
+    }
+
     // --- Manejador de errores global (404, 405, etc.) ---
 
     @RequestMapping("/error")
