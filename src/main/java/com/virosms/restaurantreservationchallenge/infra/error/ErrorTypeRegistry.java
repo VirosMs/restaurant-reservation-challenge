@@ -1,5 +1,10 @@
 package com.virosms.restaurantreservationchallenge.infra.error;
 
+
+/**
+ * ErrorTypeRegistry provides a centralized registry for error types used in the application.
+ * Each error type is associated with a URL that can be used to look up more information about the error.
+ */
 public class ErrorTypeRegistry {
 
     public static String getErrorTypeUrl(String errorKey) {

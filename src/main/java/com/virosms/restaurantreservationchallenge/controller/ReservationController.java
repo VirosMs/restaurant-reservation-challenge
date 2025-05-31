@@ -24,7 +24,7 @@ public class ReservationController {
      * Handles the creation of a new reservation.
      *
      * @param reservationsRequest the request body containing reservation details
-     * @return a redirect to the reservations page
+     * @return a redirect to the reservation page
      */
 
     @PostMapping

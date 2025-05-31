@@ -8,13 +8,19 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * Response class for reservations, containing details about the reservation such as start and end time,
+ * user name, table information, reservation ID, and a message.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReservationsResponse {
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime date;
+    private LocalDateTime dateStart;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime dateFinish;
     private String userName;
     private TablesDTO table;
     private Long reservationId;
@@ -23,7 +29,8 @@ public class ReservationsResponse {
 
     public String toString() {
         return "ReservationsResponse{" +
-                "date=" + date +
+                "Hora inicio de la reserva =" + dateStart +
+                "Hora fin de la reserva =" + dateFinish +
                 ", userName='" + userName + '\'' +
                 ", table=" + table +
                 ", reservationI=" + reservationId +

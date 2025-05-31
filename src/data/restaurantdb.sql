@@ -48,20 +48,20 @@ INSERT INTO RESTAURANT_TABLES (nombre, capacidad, status) VALUES ('Mesa 11', 6, 
 
 -- Insertar RESERVAS
 
-INSERT INTO Reservations (user_id, table_id, fecha_reserva, status, cantidad_personas) VALUES (1, 1, '2023-10-01 12:00:00', 'cancelado', 3);
-INSERT INTO Reservations (user_id, table_id, fecha_reserva, status, cantidad_personas) VALUES (2, 2, '2023-10-02 13:00:00', 'cancelado', 3);
-INSERT INTO Reservations (user_id, table_id, fecha_reserva, status, cantidad_personas) VALUES (3, 3, '2023-10-03 14:00:00', 'activo', 3);
-INSERT INTO Reservations (user_id, table_id, fecha_reserva, status, cantidad_personas) VALUES (4, 4, '2023-10-04 15:00:00', 'activo', 3);
-INSERT INTO Reservations (user_id, table_id, fecha_reserva, status, cantidad_personas) VALUES (5, 5, '2023-10-05 16:00:00', 'cancelado', 3);
-INSERT INTO Reservations (user_id, table_id, fecha_reserva, status, cantidad_personas) VALUES (6, 6, '2023-10-06 17:00:00', 'cancelado', 3);
-INSERT INTO Reservations (user_id, table_id, fecha_reserva, status, cantidad_personas) VALUES (6, 7, '2023-10-07 18:00:00', 'activo', 3);
-INSERT INTO Reservations (user_id, table_id, fecha_reserva, status, cantidad_personas) VALUES (6, 8, '2023-10-08 19:00:00', 'activo', 3);
-INSERT INTO Reservations (user_id, table_id, fecha_reserva, status, cantidad_personas) VALUES (2, 9, '2023-10-09 20:00:00', 'activo', 3);
-INSERT INTO Reservations (user_id, table_id, fecha_reserva, status, cantidad_personas) VALUES (1, 12, '2023-10-10 21:00:00', 'activo', 3);
-INSERT INTO Reservations (user_id, table_id, fecha_reserva, status, cantidad_personas) VALUES (1, 11, '2023-10-11 22:00:00', 'activo', 3);
-INSERT INTO Reservations (user_id, table_id, fecha_reserva, status, cantidad_personas) VALUES (2, 1, '2023-10-12 23:00:00', 'cancelado', 3);
-INSERT INTO Reservations (user_id, table_id, fecha_reserva, status, cantidad_personas) VALUES (3, 2, '2023-10-13 12:00:00', 'cancelado', 3);
-INSERT INTO Reservations (user_id, table_id, fecha_reserva, status, cantidad_personas) VALUES (4, 3, '2023-10-14 13:00:00', 'activo', 3);
-INSERT INTO Reservations (user_id, table_id, fecha_reserva, status, cantidad_personas) VALUES (5, 4, '2023-10-15 14:00:00', 'activo', 3);
-INSERT INTO Reservations (user_id, table_id, fecha_reserva, status, cantidad_personas) VALUES (6, 5, '2023-10-16 15:00:00', 'activo', 3);
-INSERT INTO Reservations (user_id, table_id, fecha_reserva, status, cantidad_personas) VALUES (5, 6, '2023-10-17 16:00:00', 'cancelado', 3);
+INSERT INTO Reservations (user_id, table_id, fecha_reserva_inicio, fecha_reserva_fin, status, cantidad_personas) VALUES (1, 1, '2023-10-01 12:00:00', '2023-10-01 13:00:00', 'cancelado', 3);
+INSERT INTO Reservations (user_id, table_id, fecha_reserva_inicio, fecha_reserva_fin, status, cantidad_personas) VALUES (2, 2, '2023-10-02 13:00:00', '2023-10-02 14:00:00', 'cancelado', 3);
+INSERT INTO Reservations (user_id, table_id, fecha_reserva_inicio, fecha_reserva_fin, status, cantidad_personas) VALUES (3, 3, '2023-10-03 14:00:00', '2023-10-03 15:00:00', 'activo', 3);
+INSERT INTO Reservations (user_id, table_id, fecha_reserva_inicio, fecha_reserva_fin, status, cantidad_personas) VALUES (4, 4, '2023-10-04 15:00:00', '2023-10-04 16:00:00', 'activo', 3);
+INSERT INTO Reservations (user_id, table_id, fecha_reserva_inicio, fecha_reserva_fin, status, cantidad_personas) VALUES (5, 5, '2023-10-05 16:00:00', '2023-10-05 17:00:00', 'cancelado', 3);
+INSERT INTO Reservations (user_id, table_id, fecha_reserva_inicio, fecha_reserva_fin, status, cantidad_personas) VALUES (6, 6, '2023-10-06 17:00:00', '2023-10-06 18:00:00', 'cancelado', 3);
+INSERT INTO Reservations (user_id, table_id, fecha_reserva_inicio, fecha_reserva_fin, status, cantidad_personas) VALUES (6, 7, '2023-10-07 18:00:00', '2023-10-07 19:00:00', 'activo', 3);
+INSERT INTO Reservations (user_id, table_id, fecha_reserva_inicio, fecha_reserva_fin, status, cantidad_personas) VALUES (6, 8, '2023-10-08 19:00:00', '2023-10-08 20:00:00', 'activo', 3);
+INSERT INTO Reservations (user_id, table_id, fecha_reserva_inicio, fecha_reserva_fin, status, cantidad_personas) VALUES (2, 9, '2023-10-09 20:00:00', '2023-10-09 21:00:00', 'activo', 3);
+INSERT INTO Reservations (user_id, table_id, fecha_reserva_inicio, fecha_reserva_fin, status, cantidad_personas) VALUES (1, 12, '2023-10-10 21:00:00', '2023-10-10 22:00:00', 'activo', 3);
+INSERT INTO Reservations (user_id, table_id, fecha_reserva_inicio, fecha_reserva_fin, status, cantidad_personas) VALUES (1, 11, '2023-10-11 22:00:00', '2023-10-11 23:00:00', 'activo', 3);
+INSERT INTO Reservations (user_id, table_id, fecha_reserva_inicio, fecha_reserva_fin, status, cantidad_personas) VALUES (2, 1, '2023-10-12 23:00:00', '2023-10-13 00:00:00', 'cancelado', 3);
+INSERT INTO Reservations (user_id, table_id, fecha_reserva_inicio, fecha_reserva_fin, status, cantidad_personas) VALUES (3, 2, '2023-10-13 12:00:00', '2023-10-13 13:00:00', 'cancelado', 3);
+INSERT INTO Reservations (user_id, table_id, fecha_reserva_inicio, fecha_reserva_fin, status, cantidad_personas) VALUES (4, 3, '2023-10-14 13:00:00', '2023-10-14 14:00:00', 'activo', 3);
+INSERT INTO Reservations (user_id, table_id, fecha_reserva_inicio, fecha_reserva_fin, status, cantidad_personas) VALUES (5, 4, '2023-10-15 14:00:00', '2023-10-15 15:00:00', 'activo', 3);
+INSERT INTO Reservations (user_id, table_id, fecha_reserva_inicio, fecha_reserva_fin, status, cantidad_personas) VALUES (6, 5, '2023-10-16 15:00:00', '2023-10-16 16:00:00', 'activo', 3);
+INSERT INTO Reservations (user_id, table_id, fecha_reserva_inicio, fecha_reserva_fin, status, cantidad_personas) VALUES (5, 6, '2023-10-17 16:00:00', '2023-10-17 17:00:00', 'cancelado', 3);

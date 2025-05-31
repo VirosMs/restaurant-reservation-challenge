@@ -6,6 +6,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * Entity representing a restaurant table.
+ * This class maps to the "restaurant_tables" table in the database and contains
+ * fields for table details such as name, capacity, and status.
+ */
 @Data
 @Entity
 @Table(name = "restaurant_tables")
@@ -26,12 +31,11 @@ public class RestaurantTables {
     private Status status;
 
 
+    /**
+     * Constructor for creating a restaurant table with all necessary fields.
+     */
     public enum Status {
         DISPONIBLE, RESERVADA, INACTIVA;
-
-        public String getStatus() {
-            return this.name();
-        }
 
         /**
          * Converts a string to a Status enum.
@@ -74,6 +78,10 @@ public class RestaurantTables {
             if (s1 == null && s2 == null) return true;
             if (s1 == null || s2 == null) return false;
             return s1.name().equals(s2.name());
+        }
+
+        public String getStatus() {
+            return this.name();
         }
     }
 }

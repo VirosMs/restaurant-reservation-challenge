@@ -18,6 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+/* * AuthenticationService is a service class that handles user authentication and registration.
+ * It implements UserDetailsService to load user details by username.
+ */
 @Service
 @Transactional
 @Validated
@@ -28,11 +31,24 @@ public class AuthenticationService implements UserDetailsService {
     private final UsersRepository usersRepository;
 
 
+    /**
+     * Constructor for AuthenticationService.
+     * * @param usersRepository the repository for managing Users
+     * * This constructor is used to inject the UsersRepository dependency.
+     * @param usersRepository the repository for managing Users
+     */
     @Autowired
     AuthenticationService(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
 
+    /**
+     * Registers a new user with the provided data.
+     *
+     * @param data the registration data containing user details
+     * @return a ResponseEntity indicating the result of the registration
+     * @throws BadRequestException if the input data is invalid or if a user with the same email or name already exists
+     */
     public ResponseEntity<String> registrarUsuario(RegisterDTO data) {
         logger.info("Registrando usuario INICIO");
 
@@ -67,7 +83,12 @@ public class AuthenticationService implements UserDetailsService {
         return ResponseEntity.ok().body("¡Usuario registrado exitosamente! <3 Bienvenido a la plataforma.");
     }
 
-
+    /* * Loads user details by username.
+     *
+     * @param username the username of the user
+     * @return UserDetails of the user with the specified username
+     * @throws UsernameNotFoundException if no user with the specified username is found
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return usersRepository.findByEmail(username);

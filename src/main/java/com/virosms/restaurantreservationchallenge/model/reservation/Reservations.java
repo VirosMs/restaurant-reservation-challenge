@@ -11,6 +11,12 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing a reservation in the restaurant reservation system.
+ * This class maps to the "reservations" table in the database and contains
+ * fields for reservation details such as start and end time, number of people,
+ * status, and relationships with users and restaurant tables.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,9 +37,13 @@ public class Reservations {
     private Users user;
 
 
-    @Column(name = "fecha_reserva")
+    @Column(name = "fecha_reserva_inicio", nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime fechaReserva;
+    private LocalDateTime fechaReservaInicio;
+
+    @Column(name = "fecha_reserva_fin", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime fechaReservaFin;
 
     @Column(name = "cantidad_personas", nullable = false)
     private int cantidadPersonas;
@@ -41,10 +51,21 @@ public class Reservations {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    public Reservations(Users users, RestaurantTables restaurantTables, LocalDateTime date, Integer cantidadPersonas, Status status) {
+    /**
+     * Constructor for creating a reservation with all necessary fields.
+     *
+     * @param users                the user making the reservation
+     * @param restaurantTables     the table being reserved
+     * @param fechaReservaInicio   the start time of the reservation
+     * @param fechaReservaFin      the end time of the reservation
+     * @param cantidadPersonas     the number of people for the reservation
+     * @param status               the status of the reservation (active or cancelled)
+     */
+    public Reservations(Users users, RestaurantTables restaurantTables, LocalDateTime fechaReservaInicio,  LocalDateTime fechaReservaFin, Integer cantidadPersonas, Status status) {
         this.user = users;
         this.restaurantTables = restaurantTables;
-        this.fechaReserva = date;
+        this.fechaReservaInicio = fechaReservaInicio;
+        this.fechaReservaFin = fechaReservaFin;
         this.cantidadPersonas = cantidadPersonas;
         this.status = status;
     }

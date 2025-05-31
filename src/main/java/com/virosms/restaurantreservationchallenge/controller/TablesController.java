@@ -41,11 +41,24 @@ public class TablesController {
         return tablesService.createTable(data);
     }
 
+    /**
+     * Endpoint para actualizar una mesa existente.
+     *
+     * @param id   ID de la mesa a actualizar.
+     * @param data Datos actualizados de la mesa.
+     * @return Respuesta con el mensaje de éxito.
+     */
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updateTable(@PathVariable Long id, @RequestBody @Valid TablesDTO data) {
         return tablesService.updateTable(id, data);
     }
 
+    /**
+     * Endpoint para eliminar una mesa.
+     *
+     * @param id ID de la mesa a eliminar.
+     * @return Respuesta con el mensaje de éxito.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTable(@PathVariable Long id) {
         return tablesService.deleteTable(id);

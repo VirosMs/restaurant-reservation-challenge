@@ -14,6 +14,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Entity representing a user in the restaurant reservation system.
+ * This class implements UserDetails for Spring Security and maps to the "users" table in the database.
+ * It contains fields for user details such as name, email, password, and role.
+ */
 @Entity(name = "users")
 @Table(name = "users")
 @Data
@@ -36,7 +41,15 @@ public class Users implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-
+    /**
+     * Constructor for creating a user with the specified details.
+     * Validates the email format before setting the fields.
+     *
+     * @param nombre   the name of the user
+     * @param email    the email of the user (must be valid)
+     * @param password the password of the user
+     * @param role     the role of the user (ADMIN or CLIENT)
+     */
     public Users(String nombre, String email, String password, UserRole role) {
         if (!Utils.isValidEmail(email)) return;
         this.nombre = nombre;
@@ -45,6 +58,11 @@ public class Users implements UserDetails {
         this.role = role;
     }
 
+    /**
+     * Returns the password of the user.
+     *
+     * @return the user's password
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == UserRole.ADMIN)
@@ -52,26 +70,51 @@ public class Users implements UserDetails {
         else return List.of(new SimpleGrantedAuthority("ROLE_CLIENT"));
     }
 
+    /**
+     * Returns the password of the user.
+     *
+     * @return the user's password
+     */
     @Override
     public String getUsername() {
         return this.email;
     }
 
+    /**
+     * Returns the password of the user.
+     *
+     * @return the user's password
+     */
     @Override
     public boolean isAccountNonExpired() {
         return UserDetails.super.isAccountNonExpired();
     }
 
+    /**
+     * Returns the password of the user.
+     *
+     * @return the user's password
+     */
     @Override
     public boolean isAccountNonLocked() {
         return UserDetails.super.isAccountNonLocked();
     }
 
+    /**
+     * Returns the password of the user.
+     *
+     * @return the user's password
+     */
     @Override
     public boolean isCredentialsNonExpired() {
         return UserDetails.super.isCredentialsNonExpired();
     }
 
+    /**
+     * Returns whether the user is enabled.
+     *
+     * @return true if the user is enabled, false otherwise
+     */
     @Override
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();

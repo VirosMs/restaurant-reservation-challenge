@@ -17,7 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
+import java.util.Optional;
 
+/**
+ * TablesService is a service class that handles operations related to restaurant tables.
+ * It provides methods to create, update, delete, and retrieve tables.
+ */
 @Service
 @Validated
 @Transactional
@@ -27,6 +32,12 @@ public class TablesService {
 
     private final TablesMapper tablesMapper;
 
+    /**
+     * Constructor for TablesService.
+     *
+     * @param tablesRepository the repository for managing RestaurantTables
+     * @param tablesMapper     the mapper for converting between RestaurantTables and TablesDTO
+     */
     @Autowired
     public TablesService(TablesRepository tablesRepository, TablesMapper tablesMapper) {
         this.tablesRepository = tablesRepository;
@@ -36,7 +47,7 @@ public class TablesService {
     /**
      * Método para obtener todas las mesas.
      *
-     * @return Lista de mesas.
+     * @return Respuesta con la lista de mesas.
      */
     public ResponseEntity<List<TablesDTO>> getAllTables() {
 
@@ -67,8 +78,8 @@ public class TablesService {
             throw  new BadRequestException("Invalid table data");
         }
 
-        if (tablesRepository.findByNombre(data.nombre()) != null) {
-            throw new AlreadyExistsException("Table with name " + data.nombre() + " already exists");
+        if (tablesRepository.findByNombre(data.getNombre()) != null) {
+            throw new AlreadyExistsException("Table with name " + data.getNombre() + " already exists");
         }
 
         try{
@@ -80,6 +91,13 @@ public class TablesService {
         }
     }
 
+    /**
+     * Métod para actualizar una mesa existente.
+     *
+     * @param id       ID de la mesa a actualizar.
+     * @param newData  Nuevos datos de la mesa.
+     * @return Respuesta sin contenido si la actualización es exitosa.
+     */
     public ResponseEntity<Void> updateTable(Long id, @Valid TablesDTO newData) {
 
         if (Utils.isValidTable(newData)){
@@ -104,6 +122,12 @@ public class TablesService {
         }
     }
 
+    /**
+     * Métod para eliminar una mesa por su ID.
+     *
+     * @param id ID de la mesa a eliminar.
+     * @return Respuesta sin contenido si la eliminación es exitosa.
+     */
     public ResponseEntity<Void> deleteTable(Long id) {
 
         if (!tablesRepository.existsById(id)) {
@@ -118,9 +142,26 @@ public class TablesService {
         }
     }
 
+    /**
+     * Métod para verificar si una mesa está disponible para una cantidad específica de personas.
+     *
+     * @param tableId         ID de la mesa a verificar.
+     * @param cantidadPersonas Cantidad de personas para las que se verifica la disponibilidad.
+     * @return true si la mesa tiene capacidad suficiente, false en caso contrario.
+     */
     public boolean isAvailableCapacity(Long tableId, int cantidadPersonas) {
 
         return tablesRepository.findById(tableId).stream().anyMatch(tables ->
                 tables.getCapacidad() >= cantidadPersonas);
+    }
+
+    /**
+     * Métod para encontrar una mesa por su ID.
+     *
+     * @param tableId ID de la mesa a buscar.
+     * @return Optional que contiene la mesa si se encuentra, o vacío si no se encuentra.
+     */
+    public Optional<RestaurantTables> findById(Long tableId) {
+        return tablesRepository.findById(tableId);
     }
 }
