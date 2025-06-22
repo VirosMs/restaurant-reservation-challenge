@@ -1,18 +1,12 @@
 package com.virosms.restaurantreservationchallenge.service;
 
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.virosms.restaurantreservationchallenge.infra.exception.InactiveTableException;
-import com.virosms.restaurantreservationchallenge.infra.exception.InvalidValueRequestException;
-import com.virosms.restaurantreservationchallenge.infra.exception.NotFoundTableException;
-import com.virosms.restaurantreservationchallenge.infra.exception.TableNotAvailableException;
+import com.virosms.restaurantreservationchallenge.infra.exception.*;
 import com.virosms.restaurantreservationchallenge.infra.security.JwtUtils;
 import com.virosms.restaurantreservationchallenge.mapper.ReservationsMapper;
 import com.virosms.restaurantreservationchallenge.model.Tables.RestaurantTables;
 import com.virosms.restaurantreservationchallenge.model.Tables.TablesDTO;
 import com.virosms.restaurantreservationchallenge.model.User.UserDTO;
-import com.virosms.restaurantreservationchallenge.model.User.Users;
 import com.virosms.restaurantreservationchallenge.model.reservation.Reservations;
 import com.virosms.restaurantreservationchallenge.model.reservation.ReservationsRequest;
 import com.virosms.restaurantreservationchallenge.model.reservation.ReservationsResponse;
@@ -21,13 +15,14 @@ import com.virosms.restaurantreservationchallenge.repository.UsersRepository;
 import com.virosms.restaurantreservationchallenge.utils.Constants;
 import com.virosms.restaurantreservationchallenge.utils.Utils;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -116,7 +111,7 @@ public class ReservationService {
 
         UserDTO userDTO = userService.getUserDTOFromRequest(request);
 
-        if(!Utils.validateUser(userDTO)) {
+        if (!Utils.validateUser(userDTO)) {
             throw new InvalidValueRequestException(Constants.INVALID_USER_DATA);
         }
 
@@ -195,10 +190,38 @@ public class ReservationService {
             return List.of();
         }
 
-        return  reservations.stream()
+        return reservations.stream()
                 .map(reservationMapper::mapToResponse)
                 .toList();
     }
 
 
+    /**
+     * Cancels a reservation by its ID. only the user who made the reservation can cancel it.
+     *
+     * @param reservationId the ID of the reservation to cancel
+     * @param request       the HTTP request containing the user's JWT token
+     * @return a ResponseEntity with no content if the cancellation is successful
+     * @throws InvalidValueRequestException if the user data is invalid
+     * @throws NotFoundReservation          if no reservation is found for the provided ID
+     */
+    public ResponseEntity<Void> cancelReservation(Long reservationId, @Valid HttpServletRequest request) {
+        UserDTO userDTO = userService.getUserDTOFromRequest(request);
+
+        if (!Utils.validateUser(userDTO)) {
+            throw new InvalidValueRequestException(Constants.INVALID_USER_DATA);
+        }
+
+        Reservations reservation = reservationRepository.getReferenceById(reservationId);
+
+        if (!reservation.getUser().getId().equals(userDTO.id())) {
+            throw new AccessDeniedException("No tienes permiso para acceder a esta reserva.");
+        }
+
+        reservation.setStatus(Reservations.Status.CANCELADO);
+        reservationRepository.save(reservation);
+
+
+        return ResponseEntity.noContent().build();
+    }
 }

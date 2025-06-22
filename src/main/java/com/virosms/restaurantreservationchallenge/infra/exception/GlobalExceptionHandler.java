@@ -157,6 +157,19 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Maneja excepciones de reserva no encontrada.
+     *
+     * @param ex      la excepción lanzada
+     * @param request la solicitud web
+     * @return una respuesta con el error formateado
+     */
+    @ExceptionHandler(NotFoundReservation.class)
+    public ResponseEntity<?> handleNotFoundReservation(NotFoundReservation ex, WebRequest request) {
+        return buildProblemResponse(HttpStatus.NOT_FOUND, "Reserva no encontrada", ex.getMessage(), request);
+    }
+
+
+    /**
      * Maneja excepciones de mesa inactiva.
      *
      * @param ex      la excepción lanzada
