@@ -29,4 +29,5 @@ public class Constants {
     public static final String TABLE_CAPACITY_EXCEEDED = "La capacidad de la mesa no es suficiente para la cantidad de personas solicitadas. Por favor, elige una mesa con mayor capacidad o haga dos reservas.";
     public static final String RESERVATION_CREATION_FAILED = "Error al crear la reserva. Por favor, inténtalo de nuevo más tarde.";
 
+    public static final String INVALID_USER_DATA = "Los datos del usuario son inválidos o faltan campos obligatorios.";
 }

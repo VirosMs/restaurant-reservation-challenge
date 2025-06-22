@@ -1,24 +1,33 @@
 package com.virosms.restaurantreservationchallenge.service;
 
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.virosms.restaurantreservationchallenge.infra.exception.InactiveTableException;
 import com.virosms.restaurantreservationchallenge.infra.exception.InvalidValueRequestException;
 import com.virosms.restaurantreservationchallenge.infra.exception.NotFoundTableException;
 import com.virosms.restaurantreservationchallenge.infra.exception.TableNotAvailableException;
+import com.virosms.restaurantreservationchallenge.infra.security.JwtUtils;
 import com.virosms.restaurantreservationchallenge.mapper.ReservationsMapper;
 import com.virosms.restaurantreservationchallenge.model.Tables.RestaurantTables;
 import com.virosms.restaurantreservationchallenge.model.Tables.TablesDTO;
+import com.virosms.restaurantreservationchallenge.model.User.UserDTO;
+import com.virosms.restaurantreservationchallenge.model.User.Users;
 import com.virosms.restaurantreservationchallenge.model.reservation.Reservations;
 import com.virosms.restaurantreservationchallenge.model.reservation.ReservationsRequest;
 import com.virosms.restaurantreservationchallenge.model.reservation.ReservationsResponse;
 import com.virosms.restaurantreservationchallenge.repository.ReservationRepository;
+import com.virosms.restaurantreservationchallenge.repository.UsersRepository;
 import com.virosms.restaurantreservationchallenge.utils.Constants;
 import com.virosms.restaurantreservationchallenge.utils.Utils;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -36,8 +45,11 @@ import java.util.Optional;
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
+    private final UsersRepository usersRepository;
     private final TablesService tablesService;
     private final ReservationsMapper reservationMapper;
+    private final JwtUtils jwtUtils;
+    private final UserService userService;
     Logger logger = LoggerFactory.getLogger(ReservationService.class);
 
     /**
@@ -48,10 +60,13 @@ public class ReservationService {
      * @param reservationMapper     the mapper for converting between Reservations and ReservationsResponse
      */
     @Autowired
-    public ReservationService(ReservationRepository reservationRepository, TablesService tablesService, @Qualifier("reservationsMapperImpl") ReservationsMapper reservationMapper) {
+    public ReservationService(ReservationRepository reservationRepository, TablesService tablesService, @Qualifier("reservationsMapperImpl") ReservationsMapper reservationMapper, JwtUtils jwtUtils, UsersRepository usersRepository, UserService userService) {
         this.reservationRepository = reservationRepository;
         this.tablesService = tablesService;
         this.reservationMapper = reservationMapper;
+        this.jwtUtils = jwtUtils;
+        this.usersRepository = usersRepository;
+        this.userService = userService;
     }
 
     /**
@@ -97,7 +112,13 @@ public class ReservationService {
      * @throws InactiveTableException       if the specified table is inactive
      * @throws TableNotAvailableException   if the specified table is not available for reservation
      */
-    public ResponseEntity<?> createReservation(ReservationsRequest reservationsRequest) {
+    public ResponseEntity<?> createReservation(ReservationsRequest reservationsRequest, HttpServletRequest request) {
+
+        UserDTO userDTO = userService.getUserDTOFromRequest(request);
+
+        if(!Utils.validateUser(userDTO)) {
+            throw new InvalidValueRequestException(Constants.INVALID_USER_DATA);
+        }
 
         if (!Utils.validateRequest(reservationsRequest)) {
             throw new InvalidValueRequestException(Constants.INVALID_RESERVATION_REQUEST);
@@ -119,15 +140,16 @@ public class ReservationService {
             throw new InvalidValueRequestException(Constants.TABLE_CAPACITY_EXCEEDED);
         }
 
+
         try {
-            Reservations reservation = reservationMapper.mapToEntityActive(reservationsRequest);
+            Reservations reservation = reservationMapper.mapToEntityActive(reservationsRequest, userDTO);
 
             reservation.getRestaurantTables().setStatus(RestaurantTables.Status.RESERVADA);
-            System.out.println("Creating reservation: " + reservation);
+
             Reservations savedReservation = reservationRepository.save(reservation);
-            System.out.println("Saved reservation: " + savedReservation);
+
             Optional<Reservations> fullReservation = reservationRepository.findByIdWithUserAndTable(savedReservation.getId());
-            System.out.println("Full Reservation: " + fullReservation);
+
             ReservationsResponse response = fullReservation
                     .map(reservationMapper::mapToResponse)
                     .orElseThrow(() -> new InvalidValueRequestException(Constants.RESERVATION_CREATION_FAILED));
@@ -157,4 +179,26 @@ public class ReservationService {
         List<Reservations> reservasExistentes = reservationRepository.findReservasActivasEnRango(tableId, fechaReserva, fechaReserva.plusHours(Constants.RESERVATION_DURATION_HOURS));
         return reservasExistentes.isEmpty();
     }
+
+    /**
+     * Retrieves all reservations for the user associated with the provided HTTP request.
+     *
+     * @param request the HTTP request containing the user's JWT token
+     * @return a list of Reservations for the user
+     * @throws InvalidValueRequestException if the reservation has an invalid or inactive table
+     */
+    public List<ReservationsResponse> getReservations(HttpServletRequest request) {
+
+        List<Reservations> reservations = reservationRepository.findByUserId(userService.getUserId(request));
+
+        if (reservations.isEmpty()) {
+            return List.of();
+        }
+
+        return  reservations.stream()
+                .map(reservationMapper::mapToResponse)
+                .toList();
+    }
+
+
 }

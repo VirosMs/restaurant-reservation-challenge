@@ -25,6 +25,7 @@ public class ReservationsResponse {
     private TablesDTO table;
     private Long reservationId;
     private String menssage;
+    private String status;
 
 
     public String toString() {
@@ -34,6 +35,7 @@ public class ReservationsResponse {
                 ", userName='" + userName + '\'' +
                 ", table=" + table +
                 ", reservationI=" + reservationId +
+                ", status='" + status + '\'' +
                 ", menssage='" + menssage + '\'' +
                 '}';
     }

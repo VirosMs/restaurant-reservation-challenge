@@ -53,13 +53,9 @@ public class TablesService {
 
         List<TablesDTO> tables = tablesRepository.findAllTablesAsDTO();
 
-        System.out.println(tablesRepository.findAll());
-
         if (tables.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-
-        System.out.println("Tables " + tables);
 
         return ResponseEntity.ok().body(tables);
     }
@@ -74,7 +70,6 @@ public class TablesService {
     public ResponseEntity<CreateTableResponse> createTable(TablesDTO data) {
 
         if (Utils.isValidTable(data)){
-            System.out.println("Invalid table " + data);
             throw  new BadRequestException("Invalid table data");
         }
 
@@ -101,7 +96,6 @@ public class TablesService {
     public ResponseEntity<Void> updateTable(Long id, @Valid TablesDTO newData) {
 
         if (Utils.isValidTable(newData)){
-            System.out.println("Invalid table " + newData);
             throw  new BadRequestException("Invalid table data");
         }
 

@@ -1,7 +1,6 @@
 package com.virosms.restaurantreservationchallenge.model.reservation;
 
 import com.virosms.restaurantreservationchallenge.model.Tables.RestaurantTables;
-import com.virosms.restaurantreservationchallenge.model.User.Users;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +10,6 @@ import java.time.LocalDateTime;
  * the start time of the reservation, and the number of people for the reservation.
  */
 public record ReservationsRequest(
-        Users user,
         RestaurantTables table,
         LocalDateTime fechaReservaInicio,
         Integer cantidadPersonas

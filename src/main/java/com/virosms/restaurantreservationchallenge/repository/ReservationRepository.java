@@ -61,4 +61,12 @@ public interface ReservationRepository extends JpaRepository<Reservations, Long>
      */
     @Query("SELECT r FROM Reservations r JOIN FETCH r.user JOIN FETCH r.restaurantTables")
     List<Reservations> findAllWithUserAndTable();
+
+    /**
+     * Finds all reservations made by a specific user.
+     *
+     * @param id the ID of the user
+     * @return a list of Reservations made by the specified user
+     */
+    List<Reservations> findByUserId(Long id);
 }

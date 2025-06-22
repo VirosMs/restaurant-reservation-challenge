@@ -4,6 +4,7 @@ package com.virosms.restaurantreservationchallenge.utils;
 import com.virosms.restaurantreservationchallenge.model.Tables.RestaurantTables;
 import com.virosms.restaurantreservationchallenge.model.Tables.TablesDTO;
 import com.virosms.restaurantreservationchallenge.model.User.RegisterDTO;
+import com.virosms.restaurantreservationchallenge.model.User.UserDTO;
 import com.virosms.restaurantreservationchallenge.model.User.Users;
 import com.virosms.restaurantreservationchallenge.model.reservation.ReservationsRequest;
 
@@ -28,10 +29,18 @@ public class Utils {
         if (user instanceof Users userObj) {
             return isValidUser(userObj.getNombre(), userObj.getEmail(), userObj.getPassword());
         }
+        if( user instanceof UserDTO(Long id, String nombre, String email)) {
+            return isValidUser(id, nombre, email);
+        }
         if (user instanceof RegisterDTO(String nombre, String email, String password)) {
             return isValidUser(nombre, email, password);
         }
         return false;
+    }
+
+    private static boolean isValidUser(Long id, String nombre, String email) {
+        return id != null && nombre != null && !nombre.isEmpty() &&
+                isValidEmail(email);
     }
 
     /**
@@ -77,9 +86,7 @@ public class Utils {
      * @return true if the request is valid, false otherwise
      */
     public static boolean validateRequest(ReservationsRequest request) {
-        System.out.println("Validating request: " + request);
         return request != null &&
-                request.user() != null && request.user().getId() != null &&
                 request.table() != null && request.table().getId() != null &&
                 validateDate(request.fechaReservaInicio()) && validateCapacityPersons(request.cantidadPersonas());
     }
@@ -102,6 +109,7 @@ public class Utils {
      * @return true if the date is valid, false otherwise
      */
     public static boolean validateDate(LocalDateTime date) {
-        return date != null && date.isBefore(new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+        return date != null && date.isAfter(LocalDateTime.now());
     }
+
 }

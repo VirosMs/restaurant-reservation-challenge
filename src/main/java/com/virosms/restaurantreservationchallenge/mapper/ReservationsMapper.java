@@ -1,5 +1,6 @@
 package com.virosms.restaurantreservationchallenge.mapper;
 
+import com.virosms.restaurantreservationchallenge.model.User.UserDTO;
 import com.virosms.restaurantreservationchallenge.model.reservation.Reservations;
 import com.virosms.restaurantreservationchallenge.model.reservation.ReservationsRequest;
 import com.virosms.restaurantreservationchallenge.model.reservation.ReservationsResponse;
@@ -22,16 +23,17 @@ public interface ReservationsMapper {
      * Maps a ReservationsRequest to an active Reservations entity.
      * The reservation's status is set to active, and the end date is calculated based on the start date.
      *
-     * @param response the ReservationsRequest to map
+     * @param reservationsRequest the ReservationsRequest to map
+     * @param userDTO the UserDTO representing the user making the reservation
      * @return a Reservations entity with the status set to active
      */
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "user", source = "user")
-    @Mapping(target = "restaurantTables", source = "table")
-    @Mapping(target = "fechaReservaInicio", source = "fechaReservaInicio")
-    @Mapping(target = "fechaReservaFin", source = "fechaReservaInicio", qualifiedByName = "mapDateFin")
+    @Mapping(target = "user", source = "userDTO")
+    @Mapping(target = "restaurantTables", source = "reservationsRequest.table")
+    @Mapping(target = "fechaReservaInicio", source = "reservationsRequest.fechaReservaInicio")
+    @Mapping(target = "fechaReservaFin", source = "reservationsRequest.fechaReservaInicio", qualifiedByName = "mapDateFin")
     @Mapping(target = "status", expression = "java(mapStatus(com.virosms.restaurantreservationchallenge.utils.Constants.RESERVATION_STATUS_ACTIVE))")
-    Reservations mapToEntityActive(ReservationsRequest response);
+    Reservations mapToEntityActive(ReservationsRequest reservationsRequest, UserDTO userDTO);
 
 
     /**
@@ -45,6 +47,7 @@ public interface ReservationsMapper {
     @Mapping(target = "userName", source = "user.nombre")
     @Mapping(target = "table", source = "restaurantTables")
     @Mapping(target = "reservationId", source = "id")
+    @Mapping(target = "status", source = "status")
     @Mapping(target = "dateStart", source = "fechaReservaInicio")
     @Mapping(target = "dateFinish", source = "fechaReservaFin")
     ReservationsResponse mapToResponse(Reservations reservations);
