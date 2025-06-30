@@ -58,7 +58,7 @@ public class AuthenticationService implements UserDetailsService {
         }
 
         try {
-            boolean exists = this.usersRepository.existsByEmail(data.email());
+            boolean exists = this.usersRepository.existsByEmail(data.email().toLowerCase());
             if (exists) {
                 logger.error("Ya existe un usuario con ese email o nombre: {}", data);
                 throw new BadRequestException("Ya existe un usuario con ese email o nombre");
@@ -70,7 +70,7 @@ public class AuthenticationService implements UserDetailsService {
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
 
-        Users user = new Users(data.nombre(), data.email(), encryptedPassword, UserRole.CLIENT);
+        Users user = new Users(data.nombre(), data.email().toLowerCase(), encryptedPassword, UserRole.CLIENT);
 
         try {
             this.usersRepository.save(user);
