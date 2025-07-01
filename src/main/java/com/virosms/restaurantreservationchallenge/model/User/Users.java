@@ -1,7 +1,7 @@
 package com.virosms.restaurantreservationchallenge.model.User;
 
 
-import com.virosms.restaurantreservationchallenge.utils.Utils;
+import com.virosms.restaurantreservationchallenge.model.email.Email;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,7 +33,10 @@ public class Users implements UserDetails {
     private Long id;
     @JoinColumn(name = "nombre")
     private String nombre;
-    private String email;
+
+
+    @Embedded
+    private Email email;
 
 
     @JoinColumn(name = "password")
@@ -50,10 +53,9 @@ public class Users implements UserDetails {
      * @param password the password of the user
      * @param role     the role of the user (ADMIN or CLIENT)
      */
-    public Users(String nombre, String email, String password, UserRole role) {
-        if (!Utils.isValidEmail(email)) return;
+    public Users(String nombre, Email email, String password, UserRole role) {
         this.nombre = nombre;
-        this.email = email.toLowerCase();
+        this.email = email;
         this.password = password;
         this.role = role;
     }
@@ -77,7 +79,7 @@ public class Users implements UserDetails {
      */
     @Override
     public String getUsername() {
-        return this.email;
+        return this.email.getValue();
     }
 
     /**

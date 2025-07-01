@@ -1,15 +1,14 @@
 package com.virosms.restaurantreservationchallenge.controller;
 
 import com.virosms.restaurantreservationchallenge.infra.security.TokenService;
+import com.virosms.restaurantreservationchallenge.model.email.Email;
 import com.virosms.restaurantreservationchallenge.model.User.AuthenticationDTO;
 import com.virosms.restaurantreservationchallenge.model.User.LoginResponseDTO;
 import com.virosms.restaurantreservationchallenge.model.User.RegisterDTO;
 import com.virosms.restaurantreservationchallenge.model.User.Users;
 import com.virosms.restaurantreservationchallenge.service.AuthenticationService;
 import jakarta.validation.Valid;
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -39,6 +38,7 @@ public class AuthenticationController {
 
     /**
      * Endpoint para registrar un nuevo usuario.
+     *
      * @param registerDTO Objeto que contiene la información del usuario a registrar.
      * @return Mensaje de éxito.
      */
@@ -50,11 +50,14 @@ public class AuthenticationController {
 
     /**
      * Endpoint para autenticar un usuario existente.
+     *
      * @return Mensaje de éxito.
      */
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> loginUsuario(@RequestBody @Valid AuthenticationDTO data) {
-        var userNamePassword = new UsernamePasswordAuthenticationToken(data.email().toLowerCase(), data.password());
+        Email email = new Email(data.email());
+
+        var userNamePassword = new UsernamePasswordAuthenticationToken(email, data.password());
 
         var auth = authenticationManager.authenticate(userNamePassword);
 

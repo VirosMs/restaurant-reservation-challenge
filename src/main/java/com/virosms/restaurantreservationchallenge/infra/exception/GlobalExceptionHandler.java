@@ -48,6 +48,11 @@ public class GlobalExceptionHandler {
         return buildProblemResponse(HttpStatus.NOT_FOUND, "Recurso no encontrado", ex.getMessage(), request);
     }
 
+    @ExceptionHandler(ValidateEmailException.class)
+    public ResponseEntity<?> handleEmail(ValidateEmailException ex, WebRequest request) {
+        return buildProblemResponse(HttpStatus.BAD_REQUEST, "¡El formato del email no es valido!", ex.getMessage(), request);
+    }
+
     /**
      * Maneja excepciones de solicitud inválida.
      *

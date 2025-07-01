@@ -1,5 +1,6 @@
 package com.virosms.restaurantreservationchallenge.mapper;
 
+import com.virosms.restaurantreservationchallenge.model.email.Email;
 import com.virosms.restaurantreservationchallenge.model.User.UserDTO;
 import com.virosms.restaurantreservationchallenge.model.reservation.Reservations;
 import com.virosms.restaurantreservationchallenge.model.reservation.ReservationsRequest;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
  * as well as mapping Reservations entities to ReservationsResponse.
  * This interface uses MapStruct to generate the implementation at compile time.
  */
-@Mapper(componentModel = "spring", uses = {TablesMapper.class})
+@Mapper(componentModel = "spring", uses = {TablesMapper.class, UsersMapper.class})
 public interface ReservationsMapper {
 
     /**
@@ -34,7 +35,6 @@ public interface ReservationsMapper {
     @Mapping(target = "fechaReservaFin", source = "reservationsRequest.fechaReservaInicio", qualifiedByName = "mapDateFin")
     @Mapping(target = "status", expression = "java(mapStatus(com.virosms.restaurantreservationchallenge.utils.Constants.RESERVATION_STATUS_ACTIVE))")
     Reservations mapToEntityActive(ReservationsRequest reservationsRequest, UserDTO userDTO);
-
 
     /**
      * Maps a Reservations entity to a ReservationsResponse.

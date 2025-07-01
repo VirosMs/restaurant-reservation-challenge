@@ -1,6 +1,7 @@
 package com.virosms.restaurantreservationchallenge.service;
 
 import com.virosms.restaurantreservationchallenge.infra.exception.BadRequestException;
+import com.virosms.restaurantreservationchallenge.model.email.Email;
 import com.virosms.restaurantreservationchallenge.model.User.RegisterDTO;
 import com.virosms.restaurantreservationchallenge.model.User.UserRole;
 import com.virosms.restaurantreservationchallenge.model.User.Users;
@@ -52,17 +53,22 @@ public class AuthenticationService implements UserDetailsService {
     public ResponseEntity<String> registrarUsuario(RegisterDTO data) {
         logger.info("Registrando usuario INICIO");
 
+
         if (!Utils.validateUser(data)) {
             logger.error("Error en los datos de entrada del usuario: {}", data);
             throw new BadRequestException("Error en los datos de entrada del usuario");
         }
 
         try {
-            boolean exists = this.usersRepository.existsByEmail(data.email().toLowerCase());
+            System.out.println("Validando email: " + data.email().getValue() + " getType: " + data.email().getClass().getSimpleName());
+            String emailValue = data.email().getValue();
+            System.out.println("emailValue: " + emailValue);
+            boolean exists = this.usersRepository.existsByEmail(data.email());
             if (exists) {
                 logger.error("Ya existe un usuario con ese email o nombre: {}", data);
                 throw new BadRequestException("Ya existe un usuario con ese email o nombre");
             }
+            System.out.println("Validando email: " + data.email().getValue() + " getType: " + data.email().getClass().getSimpleName() + " - Validado base de datos");
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new BadRequestException(e.getMessage());
@@ -70,7 +76,7 @@ public class AuthenticationService implements UserDetailsService {
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
 
-        Users user = new Users(data.nombre(), data.email().toLowerCase(), encryptedPassword, UserRole.CLIENT);
+        Users user = new Users(data.nombre(), data.email(), encryptedPassword, UserRole.CLIENT);
 
         try {
             this.usersRepository.save(user);
@@ -91,6 +97,6 @@ public class AuthenticationService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return usersRepository.findByEmail(username);
+        return usersRepository.findByEmail(new Email(username));
     }
 }

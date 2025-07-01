@@ -6,11 +6,10 @@ import com.virosms.restaurantreservationchallenge.model.Tables.TablesDTO;
 import com.virosms.restaurantreservationchallenge.model.User.RegisterDTO;
 import com.virosms.restaurantreservationchallenge.model.User.UserDTO;
 import com.virosms.restaurantreservationchallenge.model.User.Users;
+import com.virosms.restaurantreservationchallenge.model.email.Email;
 import com.virosms.restaurantreservationchallenge.model.reservation.ReservationsRequest;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 
 /**
  * Utils is a utility class that provides various validation methods for user data, table data, and reservation requests.
@@ -27,45 +26,33 @@ public class Utils {
      */
     public static boolean validateUser(Object user) {
         if (user instanceof Users userObj) {
-            return isValidUser(userObj.getNombre(), userObj.getEmail(), userObj.getPassword());
+            return isValidUser(userObj.getNombre(), userObj.getPassword());
         }
-        if( user instanceof UserDTO(Long id, String nombre, String email)) {
-            return isValidUser(id, nombre, email);
+        if (user instanceof UserDTO(Long id, String nombre, String email)) {
+            return isValidUser(id, nombre);
         }
-        if (user instanceof RegisterDTO(String nombre, String email, String password)) {
-            return isValidUser(nombre, email, password);
+        if (user instanceof RegisterDTO(String nombre, Email email, String password)) {
+            return isValidUser(nombre, password);
         }
         return false;
     }
 
-    private static boolean isValidUser(Long id, String nombre, String email) {
-        return id != null && nombre != null && !nombre.isEmpty() &&
-                isValidEmail(email);
+    private static boolean isValidUser(Long id, String nombre) {
+        return id != null && nombre != null && !nombre.isEmpty();
     }
 
     /**
      * Validates the user data.
      *
      * @param nombre   the name of the user
-     * @param email    the email of the user
      * @param password the password of the user
      * @return true if the user data is valid, false otherwise
      */
-    private static boolean isValidUser(String nombre, String email, String password) {
+    private static boolean isValidUser(String nombre, String password) {
         return nombre != null && !nombre.isEmpty() &&
-                isValidEmail(email) &&
                 password != null && !password.isEmpty();
     }
 
-    /**
-     * Validates the email format.
-     *
-     * @param email the email to validate
-     * @return true if the email is valid, false otherwise
-     */
-    public static boolean isValidEmail(String email) {
-        return email != null && !email.isBlank() && email.matches(Constants.EMAIL_REGEX);
-    }
 
     /**
      * Validates the table data.

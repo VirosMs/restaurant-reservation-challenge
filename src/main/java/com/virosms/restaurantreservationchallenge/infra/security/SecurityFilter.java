@@ -1,5 +1,6 @@
 package com.virosms.restaurantreservationchallenge.infra.security;
 
+import com.virosms.restaurantreservationchallenge.model.email.Email;
 import com.virosms.restaurantreservationchallenge.repository.UsersRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -58,12 +59,14 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
         if (token != null) {
             var email = tokenService.validateToken(token);
-            UserDetails userDetails = usersRepository.findByEmail(email);
-
-            var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (email != null) {
+                UserDetails userDetails = usersRepository.findByEmail(new Email(email));
+                if (userDetails != null) {
+                    var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            }
         }
-
         filterChain.doFilter(request, response);
     }
 

@@ -39,7 +39,7 @@ public class TokenService {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("restaurant-reservation-challenge")
-                    .withSubject(user.getEmail())
+                    .withSubject(user.getEmail().getValue())
                     .withExpiresAt(genExperirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException e) {

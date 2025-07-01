@@ -4,6 +4,7 @@ import com.virosms.restaurantreservationchallenge.infra.exception.InvalidValueRe
 import com.virosms.restaurantreservationchallenge.infra.security.JwtUtils;
 import com.virosms.restaurantreservationchallenge.model.User.UserDTO;
 import com.virosms.restaurantreservationchallenge.model.User.Users;
+import com.virosms.restaurantreservationchallenge.model.email.Email;
 import com.virosms.restaurantreservationchallenge.repository.UsersRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class UserService {
             throw new InvalidValueRequestException("El token de autenticación no contiene un correo electrónico válido.");
         }
 
-        Users user = usersRepository.findByEmail(userEmail);
+        Users user = usersRepository.findByEmail(new Email(userEmail));
 
         if (user == null) {
             throw new InvalidValueRequestException("No se encontró un usuario con el correo electrónico proporcionado.");
@@ -69,7 +70,7 @@ public class UserService {
      */
     public UserDTO getUserDTOFromRequest(HttpServletRequest request) {
         Users user = getUserFromRequest(request);
-        return new UserDTO(user.getId(), user.getNombre(), user.getEmail());
+        return new UserDTO(user.getId(), user.getNombre(), user.getEmail().getValue());
     }
 
     /**
