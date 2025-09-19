@@ -29,7 +29,7 @@ jobs:
 
           # Actualizar código
           echo "📥 Pulling latest code..."
-          git pull origin main
+          git pull origin master
 
           # Parar contenedores actuales
           echo "🛑 Stopping current API containers..."
