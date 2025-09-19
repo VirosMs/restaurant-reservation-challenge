@@ -1,7 +1,12 @@
-# Etapa 1: Build
-FROM maven:3.9.1-eclipse-temurin-21 AS build
+# Etapa 1: Build con Java 21 + Maven instalado manualmente
+FROM eclipse-temurin:21-jdk AS build
 
 WORKDIR /app
+
+# Instalar Maven
+RUN apt-get update && \
+    apt-get install -y maven && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copiar archivos de configuración
 COPY pom.xml .
@@ -17,12 +22,12 @@ COPY src ./src
 # Compilar aplicación
 RUN ./mvnw clean package -DskipTests -B
 
-# Etapa 2: Runtime
+# Etapa 2: Runtime con JRE ligero
 FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 
-# Instalar curl en Alpine
+# Instalar curl y bash en Alpine
 RUN apk add --no-cache curl bash
 
 # Crear usuario no root por seguridad
