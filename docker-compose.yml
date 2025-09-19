@@ -86,5 +86,5 @@ volumes:
 
 # Red personalizada
 networks:
-  app-network:
+  restaurant-network:
     driver: bridge
