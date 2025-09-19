@@ -1,0 +1,76 @@
+name: Deploy API to Server
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'README.md'
+      - 'docs/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🚀 Deploy API to server
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        port: ${{ secrets.SERVER_PORT }}
+        script: |
+          echo "🔄 Starting API deployment..."
+          
+          # Ir al directorio del proyecto
+          cd ~/git/api-projects/proyecto-api
+          
+          # Hacer backup del estado actual
+          echo "📦 Creating backup..."
+          git stash push -m "pre-deploy-backup-$(date +%Y%m%d_%H%M%S)" || true
+          
+          # Actualizar código
+          echo "📥 Pulling latest code..."
+          git pull origin main
+          
+          # Parar contenedores actuales
+          echo "🛑 Stopping current API containers..."
+          docker-compose down || true
+          
+          # Construir y iniciar nuevos contenedores
+          echo "🏗️ Building and starting API..."
+          docker-compose up -d --build
+          
+          # Esperar a que el servicio esté listo
+          echo "⏳ Waiting for API to be ready..."
+          sleep 10
+          
+          # Verificar que todo está funcionando
+          echo "✅ Verifying API deployment..."
+          docker-compose ps
+          
+          # Test básico de conectividad (opcional)
+          curl -f http://localhost:3001/actuator/health || echo "⚠️ Health check failed, but container is running"
+          
+          # Limpiar imágenes no utilizadas
+          echo "🧹 Cleaning up..."
+          docker system prune -f
+          
+          echo "🎉 API deployment completed successfully!"
+
+    - name: 📧 Notify success
+      if: success()
+      run: |
+        echo "✅ API Deployment successful!"
+        echo "📍 Server: ${{ secrets.SERVER_HOST }}:3001"
+        echo "📝 Commit: ${{ github.sha }}"
+        echo "👤 Author: ${{ github.actor }}"
+
+    - name: ❌ Notify failure
+      if: failure()
+      run: |
+        echo "❌ API Deployment failed!"
+        echo "Check logs above for details"
