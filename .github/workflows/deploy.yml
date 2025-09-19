@@ -16,6 +16,27 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
 
+      - name: 🗝️ Create .env file from GitHub Secrets & Vars
+        run: |
+          echo "DB_NAME=${{ vars.DB_NAME }}" >> .env
+          echo "DB_USERNAME=${{ vars.DB_USERNAME }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+
+          echo "APP_NAME=${{ vars.APP_NAME }}" >> .env
+          echo "SERVER_PORT=${{ vars.SERVER_PORT }}" >> .env
+          echo "LOG_LEVEL=${{ vars.LOG_LEVEL }}" >> .env
+          echo "DDL_AUTO=${{ vars.DDL_AUTO }}" >> .env
+
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "JWT_EXPIRATION=${{ vars.JWT_EXPIRATION }}" >> .env
+          echo "JWT_ISSUER=${{ vars.JWT_ISSUER }}" >> .env
+
+          echo "PGADMIN_EMAIL=${{ vars.PGADMIN_EMAIL }}" >> .env
+          echo "PGADMIN_PASSWORD=${{ secrets.PGADMIN_PASSWORD }}" >> .env
+
+          echo "ACTUATOR_USERNAME=${{ vars.ACTUATOR_USERNAME }}" >> .env
+          echo "ACTUATOR_PASSWORD=${{ secrets.ACTUATOR_PASSWORD }}" >> .env  
+
       - name: 🚀 Deploy API to server
         run: |
           echo "🔄 Starting API deployment..."
