@@ -20,7 +20,7 @@ jobs:
           echo "🔄 Starting API deployment..."
 
           # Ir al directorio del proyecto clonado por el runner
-          cd api-projects/proyecto-api
+          cd ${{ github.workspace }}
 
           # Hacer backup del estado actual
           echo "📦 Creating backup..."
