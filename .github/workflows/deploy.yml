@@ -11,7 +11,8 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
-
+    environment: production
+    
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
@@ -31,7 +32,7 @@ jobs:
           echo "JWT_EXPIRATION=${{ vars.JWT_EXPIRATION }}" >> .env
           echo "JWT_ISSUER=${{ vars.JWT_ISSUER }}" >> .env
 
-          echo "PGADMIN_EMAIL=${{ vars.PGADMIN_EMAIL }}" >> .env
+          echo "PGADMIN_EMAIL=${{ secrets.PGADMIN_EMAIL }}" >> .env
           echo "PGADMIN_PASSWORD=${{ secrets.PGADMIN_PASSWORD }}" >> .env
 
           echo "ACTUATOR_USERNAME=${{ vars.ACTUATOR_USERNAME }}" >> .env
