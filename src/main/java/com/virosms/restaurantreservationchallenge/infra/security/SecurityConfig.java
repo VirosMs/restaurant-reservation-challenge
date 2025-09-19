@@ -44,8 +44,16 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        // Auth endpoints
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+
+                        // Actuator endpoints
+                        .requestMatchers("/actuator/health").permitAll()
+                        .requestMatchers("/actuator/info").permitAll()
+                        .requestMatchers("/actuator/**").hasRole("ADMIN")
+
+                        // Existing API endpoints
                         .requestMatchers(HttpMethod.GET, "/tables").hasAnyRole("CLIENT", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/tables").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/tables/{id}").hasAnyRole("ADMIN", "CLIENT")
@@ -53,7 +61,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/reservations").hasAnyRole("CLIENT", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/reservations").hasAnyRole("CLIENT", "ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/reservations").hasAnyRole("CLIENT", "ADMIN")
-                        .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptions -> exceptions
