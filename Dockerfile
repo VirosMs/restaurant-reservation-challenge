@@ -8,7 +8,7 @@ COPY pom.xml .
 COPY .mvn .mvn
 COPY mvnw .
 
-# Descargar dependencias (se cachea si no cambio pom.xml)
+# Descargar dependencias (cache)
 RUN chmod +x mvnw && ./mvnw dependency:go-offline -B
 
 # Copiar código fuente
@@ -22,14 +22,14 @@ FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 
-# Instalar herramientas útiles para debugging (opcional)
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+# Instalar curl en Alpine
+RUN apk add --no-cache curl bash
 
 # Crear usuario no root por seguridad
-RUN groupadd -r appuser && useradd -r -g appuser appuser
+RUN addgroup -S appuser && adduser -S appuser -G appuser
 
 # Copiar el JAR desde la etapa de build
-COPY --from=builder /app/target/*.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 
 # Cambiar propiedad del archivo
 RUN chown appuser:appuser app.jar
