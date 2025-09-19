@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.virosms</groupId>
     <artifactId>restaurant-reservation-challenge</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.4-SNAPSHOT</version>
     <name>restaurant-reservation-challenge</name>
     <description>restaurant-reservation-challenge</description>
     <url/>
