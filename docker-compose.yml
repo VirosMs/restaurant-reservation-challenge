@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  proyecto-api:
+    build: .
+    container_name: proyecto-api
+    restart: unless-stopped
+    ports:
+      - "3001:8080"        # Mapea el puerto 8080 interno al 3001 externo
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    networks:
+      - servidor-network
+
+networks:
+  servidor-network:
+    external: true
