@@ -23,7 +23,7 @@ services:
       - SHOW_SQL=${SHOW_SQL}
 
       # JWT
-      - JWT_SECRET=${JWT_SECRET}
+      - API_SECURITY_TOKEN_SECRET=${JWT_SECRET}
       - JWT_EXPIRATION=${JWT_EXPIRATION}
       - JWT_ISSUER=${JWT_ISSUER}
 
