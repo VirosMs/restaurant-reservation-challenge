@@ -55,7 +55,7 @@ logging:
   level:
     root: ${LOG_LEVEL:DEBUG}
     com.virosms.restaurantreservationchallenge: ${LOG_LEVEL:DEBUG}
-    org.hibernate.SQL: true
+    org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     org.springframework.security: DEBUG
 
