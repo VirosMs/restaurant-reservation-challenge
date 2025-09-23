@@ -15,19 +15,21 @@ services:
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
 
-      # Perfil de Spring
-      - SPRING_PROFILES_ACTIVE=prod
-
       # Configuración de la app
       - SERVER_PORT=8080
       - APP_NAME=${APP_NAME}
       - LOG_LEVEL=${LOG_LEVEL}
       - DDL_AUTO=${DDL_AUTO}
+      - SHOW_SQL=${SHOW_SQL}
 
       # JWT
       - JWT_SECRET=${JWT_SECRET}
       - JWT_EXPIRATION=${JWT_EXPIRATION}
       - JWT_ISSUER=${JWT_ISSUER}
+
+      # Actuator Security
+      - ACTUATOR_USERNAME=${ACTUATOR_USERNAME}
+      - ACTUATOR_PASSWORD=${ACTUATOR_PASSWORD}
 
     depends_on:
       postgres:
@@ -51,7 +53,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./data:/docker-entrypoint-initdb.d  # Scripts de inicialización
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME}"]
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME}" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -63,12 +65,12 @@ services:
   # Opcional: PgAdmin para gestionar la DB
   pgadmin:
     image: dpage/pgadmin4:latest
-    container_name: restaurante-api-pgadmin
+    container_name: restaurantes-pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     ports:
-      - "5050:80"  # Acceder en localhost:5050
+      - "${PGADMIN_PORT:-5050}:80"  # Acceder en localhost:5050
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     depends_on:
