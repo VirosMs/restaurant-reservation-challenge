@@ -18,7 +18,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: ${DDL_AUTO:update}
-    show-sql: ${SHOW_SQL:false}
+    show-sql: ${SHOW_SQL:true:false}
     properties:
       hibernate:
         format_sql: true
@@ -55,7 +55,7 @@ logging:
   level:
     root: ${LOG_LEVEL:DEBUG}
     com.virosms.restaurantreservationchallenge: ${LOG_LEVEL:DEBUG}
-    org.hibernate.SQL: ${SHOW_SQL:false}
+    org.hibernate.SQL: ${SHOW_SQL:true:false}
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     org.springframework.security: DEBUG
 
